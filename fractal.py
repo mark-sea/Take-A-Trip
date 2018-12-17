@@ -1,6 +1,7 @@
 from tkinter import *
 import turtle
 import random
+from PIL import ImageTk, Image
 
 
 #turtle_speed = 5
@@ -11,11 +12,13 @@ def doSomething():
 
 #The triangle fractal
 def triangleFractal():
+    wn = turtle.Screen()
+    wn.bgcolor("green")
     brush = turtle.Turtle()
     brush.ht()
     brush.speed(5)
 
-    brush.pencolor(black())
+    brush.pencolor('orange')
 
     points = [[-175,-125],[0,175],[175,-125]] #size of triangle
 
@@ -52,15 +55,41 @@ def snowflakeFractal():
     # setup the window with a background color
     #wn = turtle.Screen()
     #wn.bgcolor("cyan")
-
-    # assign a name to your turtle
     brush = turtle.Turtle()
     brush.ht()
     brush.speed(5)
     brush.pencolor('orange')
 
-    # create a list of colours
-    #sfcolor = ["white", "blue", "purple", "grey", "magenta"]
+    # move the pen into starting position
+    brush.penup()
+    brush.forward(10)
+    brush.left(45)
+    brush.pendown()
+    #brush.color(random.choice(sfcolor))
+
+    # draw branch 8 times to make a snowflake
+    for i in range(8):
+        for i in range(3):
+            for i in range(3):
+                brush.forward(10.0*10/3)
+                brush.backward(10.0*10/3)
+                brush.right(45)
+            brush.left(90)
+            brush.backward(10.0*10/3)
+            brush.left(45)
+        brush.right(90)
+        brush.forward(10.0*10)        
+        brush.left(45)
+
+
+def snowStorm():
+    # setup the window with a background color
+    wn = turtle.Screen()
+    wn.bgcolor("cyan")
+    brush = turtle.Turtle()
+    brush.ht()
+    brush.speed(1000)
+    brush.pencolor('orange')
 
     # create a function to create different size snowflakes
     def snowflake(size):
@@ -72,13 +101,10 @@ def snowflakeFractal():
         brush.pendown()
         #brush.color(random.choice(sfcolor))
 
-        # draw branch 8 times to make a snowflake
         for i in range(8):
             branch(size)
             brush.left(45)
 
-
-    # create one branch of the snowflake
     def branch(size):
         for i in range(3):
             for i in range(3):
@@ -91,9 +117,7 @@ def snowflakeFractal():
         brush.right(90)
         brush.forward(10.0*size)
 
-    # loop to create 20 different sized snowflakes
-    # with different starting co-ordinates
-    for i in range(20):
+    for i in range(50):
         x = random.randint(-200, 200)
         y = random.randint(-200, 200)
         sf_size = random.randint(1, 4)
@@ -102,7 +126,11 @@ def snowflakeFractal():
         brush.pendown()
         snowflake(sf_size)
 
+
+
 def squareFractal():
+    wn = turtle.Screen()
+    wn.bgcolor("yellow")
     def s(n, l):
 
         if n == 0: # stop conditions
@@ -138,8 +166,6 @@ def squareFractal():
             # update screen
             turtle.update()
 
-    # --- main ---
-
     # stop updating screen (to make it faster)
     turtle.tracer(0)
 
@@ -149,35 +175,52 @@ def squareFractal():
     # event loop
     turtle.done()
 
+
 '''
-def lineColor(color):
-    if(color =="Black")
-    brush.pencolor('black')
-
-
-#The triangle fractal
-def triangleFractal():
-    brush = turtle.Turtle()
-    brush.ht()
-    brush.speed(5)
-    brush.pencolor('orange')
-
-
-
 def increaseSpeed():
     turtle_speed = turtle_speed + 5
 
 def decreaseSpeed():
     turtle_speed = turtle_speed - 5
+
+def colorWheel():
+
+    #will default to orange
+    #because orange is a cool color
+    color = 'orange'
+
+    if(lineColorMenu.label("Black")):
+        color = 'black'
+        return 'black'
+    elif(lineColorMenu.index("White") == 2234):
+        color = 'white'
+        return color
+    elif(lineColorMenu.index("Red") == 3):
+        color = 'red'
+        return color
+    
+    elif(lineColorMenu.index("Blue") == 4):
+        color = 'blue'
+        return color   
+    elif(lineColorMenu.index("Yellow") == 5):
+        color = 'yellow'
+        return color
+    elif(lineColorMenu.index("Green") == 6):
+        color = 'green'
+        return color
+    elif(lineColorMenu.index("Orange") == 7):
+        color = 'orange'
+        return color
+    elif(lineColorMenu.index("Purple") == 8):
+        color = 'purple'
+        return color
+    elif(lineColorMenu.index("Cyan") == 9):
+        color = 'cyan'
+        return color
+    elif(lineColorMenu.index("Brown") == 10):
+        color = 'brown'
+        return color
 '''
-#def colorSelect():
-
-
-def black():
-    return 'black'
-
-def white():
-    return 'white'
 
 def clear():
     turtle.clearscreen()
@@ -188,16 +231,17 @@ def exit():
 
 
 root = Tk()
-
 menu = Menu(root)
-
 root.config(menu = menu)
+
 
 fractalMenu = Menu(menu)
 menu.add_cascade(label="Fractals", menu=fractalMenu)
 fractalMenu.add_command(label="Square", command=squareFractal)
-fractalMenu.add_command(label="Snowflake", command=snowflakeFractal)
 fractalMenu.add_command(label="Triangle", command=triangleFractal)
+fractalMenu.add_command(label="Snowflake", command=snowflakeFractal)
+fractalMenu.add_command(label="Snowstorm", command=snowStorm)
+
 
 editMenu = Menu(menu)
 menu.add_cascade(label = "Edit", menu=editMenu)
@@ -207,12 +251,21 @@ editMenu.add_command(label="Clear", command=clear)
 editMenu.add_command(label="Exit", command=exit)
 
 
-
 lineColorMenu = Menu(menu)
 menu.add_cascade(label = "Line Color", menu=lineColorMenu)
-lineColorMenu.add_command(label="Black", command=black)
-lineColorMenu.add_command(label="White", command=doSomething)
-lineColorMenu.add_radiobutton(label="Blackk", command=black)
+lineColorMenu.add_radiobutton(label="Black", value=1, command=doSomething)
+lineColorMenu.add_radiobutton(label="White", command=doSomething)
+lineColorMenu.add_radiobutton(label="Red", value=4, command=doSomething)
+lineColorMenu.add_radiobutton(label="Blue", command=doSomething)
+lineColorMenu.add_radiobutton(label="Yellow", command=doSomething)
+lineColorMenu.add_radiobutton(label="Green", command=doSomething)
+lineColorMenu.add_radiobutton(label="Orange", command=doSomething)
+lineColorMenu.add_radiobutton(label="Purple", command=doSomething)
+lineColorMenu.add_radiobutton(label="Cyan", command=doSomething)
+lineColorMenu.add_radiobutton(label="Brown", command=doSomething)
+
+
+
 '''
 lineColorMenu.add_command(label="Red", command=doSomething)
 lineColorMenu.add_command(label="Blue", command=doSomething)
@@ -221,6 +274,7 @@ lineColorMenu.add_command(label="Green", command=doSomething)
 lineColorMenu.add_command(label="Orange", command=doSomething)
 lineColorMenu.add_command(label="Purple", command=doSomething)
 lineColorMenu.add_command(label="Cyan", command=doSomething)
+lineColorMenu.add_command(label-"Brown", command=doSomething)
 '''
 
 
@@ -236,6 +290,8 @@ fillColorMenu.add_command(label="Green", command=doSomething)
 fillColorMenu.add_command(label="Orange", command=doSomething)
 fillColorMenu.add_command(label="Purple", command=doSomething)
 fillColorMenu.add_command(label="Cyan", command=doSomething)
+fillColorMenu.add_command(label="Brown", command=doSomething)
+
 
 
 
@@ -250,6 +306,8 @@ backgroundColorMenu.add_command(label="Green", command=doSomething)
 backgroundColorMenu.add_command(label="Orange", command=doSomething)
 backgroundColorMenu.add_command(label="Purple", command=doSomething)
 backgroundColorMenu.add_command(label="Cyan", command=doSomething)
+backgroundColorMenu.add_command(label="Brown", command=doSomething)
+
 
 
 '''
@@ -257,4 +315,7 @@ colorMenu.add_command(label="Line Color", command=doSomething)
 colorMenu.add_command(label="Fill Color", command=doSomething)
 colorMenu.add_command(label="Background Color", command=doSomething)
 '''
+img = ImageTk.PhotoImage(Image.open("project_image.jpg"))
+panel = Label(root, image=img)
+panel.pack(side="bottom", fill="both", expand="yes")
 root.mainloop()
